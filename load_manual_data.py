@@ -28,8 +28,16 @@ MANUAL_CAPACITIES = {
 }
 
 def load(csv_path, db_path):
-    df = pd.read_csv(csv_path)
-    df.columns = EXPECTED_COLUMNS
+    # Read the CSV with auto-detected delimiter to prevent column mismatch
+    df = pd.read_csv(csv_path, sep=None, engine='python')
+
+    # If the file header or columns are off, map them safely by position
+    if len(df.columns) != len(EXPECTED_COLUMNS):
+        # Fallback: assign expected columns by index if header count differs
+        df = pd.read_csv(csv_path, sep=None, engine='python', header=None, skiprows=1)
+        df.columns = EXPECTED_COLUMNS
+    else:
+        df.columns = EXPECTED_COLUMNS
 
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
@@ -37,12 +45,11 @@ def load(csv_path, db_path):
     updated_count = 0
 
     for index, row in df.iterrows():
-        name = row["facility_name"].strip()
-        address = row["address"]
-        phone = row["contact_info"]
-        amenities = row["amenities_raw"]
+        name = str(row["facility_name"]).strip()
+        address = str(row["address"])
+        phone = str(row["contact_info"])
+        amenities = str(row["amenities_raw"])
 
-        # Pull capacity from our explicit dictionary map
         capacity = MANUAL_CAPACITIES.get(name)
 
         cur.execute("SELECT facility_id FROM facilities WHERE facility_name = ?", (name,))
@@ -67,10 +74,3 @@ def load(csv_path, db_path):
     conn.close()
 
     print(f"[load_manual_data] Successfully processed {updated_count} facilities with manual capacities.")
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--csv", required=True)
-    parser.add_argument("--db", default="marina_analysis.db")
-    args = parser.parse_args()
-    load(args.csv, args.db)

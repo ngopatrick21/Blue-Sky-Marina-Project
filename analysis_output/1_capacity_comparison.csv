@@ -1,10 +1,10 @@
 facility_name,total_capacity,dry_storage_capacity,role
-Holland Riverside Marina,300.0,,Competitor
-Discovery Bay Marina,263.0,630.0,Competitor
-Driftwood Marina,210.0,0.0,Competitor
-New Bridge Marina,185.0,,Competitor
-Lloyd's Holiday Harbor,125.0,100.0,Blue Sky Marina (own)
-Big Break Marina,,60.0,Competitor
-Lauritzen Yacht Harbor,,,Competitor
-Cruiser Haven Marina,,,Competitor
-Sunset Harbor Marina & RV,,,Competitor
+Holland Riverside Marina,300,,Competitor
+Discovery Bay Marina,263,630.0,Competitor
+Driftwood Marina,210,0.0,Competitor
+New Bridge Marina,185,,Competitor
+Lauritzen Yacht Harbor,138,,Competitor
+Cruiser Haven Marina,130,,Competitor
+Lloyd's Holiday Harbor,125,100.0,Blue Sky Marina (own)
+Big Break Marina,120,60.0,Competitor
+Sunset Harbor Marina & RV,64,,Competitor
