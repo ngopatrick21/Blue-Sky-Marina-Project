@@ -1,0 +1,10 @@
+facility_name,address,total_capacity,dry_storage_capacity,google_rating,google_review_count,slip_price_min_monthly,slip_price_max_monthly,slip_price_raw,storage_price_raw,launch_fee_raw,fuel_available
+Lloyd's Holiday Harbor,415 Fleming Lane,125.0,100.0,,,,,,,,
+Big Break Marina,"100 Big Break Rd, Oakley, CA 94561",,60.0,4.3,217.0,300.0,600.0,$300 - $600,$20 per day,$15 / $20 (Weekdays/Weekends),Gasoline + Diesel
+Cruiser Haven Marina,"7000 Orwood Rd, Brentwood, CA 94513",,,4.5,45.0,,,$225 Minimum | $9-$12 per foot,$200/month,10.0,
+Discovery Bay Marina,"5901 Marina Road, Discovery Bay, CA 94505",263.0,630.0,4.5,253.0,420.0,630.0,$420 - $630,Covered dry-stack storage available (rate not published),25.0,Gasoline (Regular + Premium) + Diesel
+Driftwood Marina,"6338 Bridgehead Rd, Oakley, CA 94561",210.0,0.0,4.4,75.0,,,"~$255/mo (covered slip, incl. water & electric) - unverified 3rd-party estimate",No dry storage,10.0,Gasoline + Diesel
+Holland Riverside Marina,"7000 Holland Tract Rd, Brentwood, CA 94513",300.0,,4.3,149.0,,,230.0,"Storage via on-site ""Riverside Storage"" (boat/RV) - rate not published",15.0,Non-Ethanol regular gasoline
+Lauritzen Yacht Harbor,"115 Lauritzen Ln, Oakley, CA 94561",,,4.7,66.0,250.0,650.0,$250 - $650,No storage,$10-$15,Gasoline + Diesel
+New Bridge Marina,"6325 Bridgehead Rd, Antioch, CA 94509",185.0,,4.1,20.0,120.0,600.0,$120 - $600 ,No dry storage,$5/launch (self-pay); $100 annual pass,Gasoline + Diesel
+Sunset Harbor Marina & RV,"3040 Dutch Slough Rd, Oakley, CA 94561",,,4.4,71.0,350.0,550.0,$350 - $550,$125/month,12.0,

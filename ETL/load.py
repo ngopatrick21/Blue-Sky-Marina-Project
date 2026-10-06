@@ -134,8 +134,17 @@ def load_facilities(clean_df: pd.DataFrame, db_path: str):
     keep_cols = [c for c in COLUMN_MAP.values() if c in df_renamed.columns]
     df_final = df_renamed[keep_cols]
 
+    # DIAGNOSTIC: check for duplicate column names, a common cause of
+    # "row[col] returns a Series instead of a scalar" bugs.
+    dupes = df_final.columns[df_final.columns.duplicated()].tolist()
+    if dupes:
+        print(f"[load] WARNING: duplicate column names detected: {dupes} -- "
+              f"this WILL cause binding errors. Check transform.py for a field "
+              f"name collision (e.g. 'Type' renaming to the same name as an "
+              f"already-present 'facility_type' column).")
+
     inserted, updated = 0, 0
-    for _, row in df_final.iterrows():
+    for idx, row in df_final.iterrows():
         name = to_native(row["facility_name"])
         cur.execute("SELECT facility_id FROM facilities WHERE facility_name = ?", (name,))
         existing = cur.fetchone()
@@ -144,14 +153,28 @@ def load_facilities(clean_df: pd.DataFrame, db_path: str):
             other_cols = [c for c in keep_cols if c != "facility_name"]
             set_clause = ", ".join(f"{col} = ?" for col in other_cols)
             values = [to_native(row[col]) for col in other_cols]
-            cur.execute(f"UPDATE facilities SET {set_clause} WHERE facility_id = ?",
-                        values + [existing[0]])
+            try:
+                cur.execute(f"UPDATE facilities SET {set_clause} WHERE facility_id = ?",
+                            values + [existing[0]])
+            except (sqlite3.InterfaceError, sqlite3.ProgrammingError):
+                print(f"\n[load] FAILED on row {idx} (facility_name={name!r}), UPDATE. "
+                      f"Column -> value -> type:")
+                for col, val in zip(other_cols, values):
+                    print(f"    {col:25s} -> {val!r:40} -> {type(val)}")
+                raise
             updated += 1
         else:
             cols_clause = ", ".join(keep_cols)
             placeholders = ", ".join("?" for _ in keep_cols)
             values = [to_native(row[col]) for col in keep_cols]
-            cur.execute(f"INSERT INTO facilities ({cols_clause}) VALUES ({placeholders})", values)
+            try:
+                cur.execute(f"INSERT INTO facilities ({cols_clause}) VALUES ({placeholders})", values)
+            except (sqlite3.InterfaceError, sqlite3.ProgrammingError):
+                print(f"\n[load] FAILED on row {idx} (facility_name={name!r}), INSERT. "
+                      f"Column -> value -> type:")
+                for col, val in zip(keep_cols, values):
+                    print(f"    {col:25s} -> {val!r:40} -> {type(val)}")
+                raise
             inserted += 1
 
     conn.commit()
