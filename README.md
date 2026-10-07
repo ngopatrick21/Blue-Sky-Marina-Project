@@ -52,7 +52,7 @@ versions of this project.
 
 ## Live links
 
-- Tableau Dashboard: *(add after publishing)*
+- Tableau Dashboard: *https://public.tableau.com/app/profile/patrick.ngo4046/vizzes*
 - Figma Positioning Summary: *(add after publishing)*
 
 ## Tech stack
