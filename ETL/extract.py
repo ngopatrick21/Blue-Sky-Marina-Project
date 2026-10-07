@@ -9,16 +9,18 @@ that's the Transform stage's job.
 import time
 import requests
 
+# Recognizing script as legitimate browser request, not a bot
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (personal research project; contact: your_email@berkeley.edu)"
+    "User-Agent": "Mozilla/5.0 (personal research project; contact: ngopatrick21@berkeley.edu)"
 }
 
+# Department of Boating and Waterways public data url
 FACILITY_LIST_URL = "https://dbw.parks.ca.gov/BoatingFacilities/City/{city}"
 
 # The Delta boating region spans several city boundaries in DBW's system --
 # real competitors (Driftwood, Lauritzen, Big Break, etc.) are NOT all
 # filed under "Antioch," even though they're right across the river.
-# Searching just one city silently misses real competitors.
+# To search one city means missing real competitors
 DELTA_REGION_CITIES = [
     "Antioch",
     "Oakley",
@@ -31,7 +33,9 @@ DELTA_REGION_CITIES = [
 
 def extract_facility_list_html(city: str) -> str:
     """Fetch the raw HTML of the facility list page for a single city."""
+    # take the city name and format the spaces for the urls
     url = FACILITY_LIST_URL.format(city=city.replace(" ", "%20"))
+    ## requests downloads the raw HTML data for the facilities in that city
     resp = requests.get(url, headers=HEADERS, timeout=15)
     resp.raise_for_status()
     return resp.text
@@ -40,10 +44,12 @@ def extract_facility_list_html(city: str) -> str:
 def extract_all_city_lists(cities: list[str] = None) -> dict[str, str]:
     """
     Fetch raw HTML for every city in the Delta region (or a custom list).
-    Returns {city_name: raw_html}. One request per city, with a polite delay.
+    Returns {city_name: raw_html}. One request per city, with a little delay.
     """
     cities = cities or DELTA_REGION_CITIES
     pages = {}
+    # looping through all the cities in the list, download the list pages one-by-one
+    # delay so that I don't get blocked by the server
     for city in cities:
         print(f"[extract] Fetching facility list for {city}")
         try:
@@ -51,11 +57,13 @@ def extract_all_city_lists(cities: list[str] = None) -> dict[str, str]:
         except requests.HTTPError as e:
             print(f"  [warning] Could not fetch {city}: {e}")
         time.sleep(1)
+    # return dictionary with each city name paired with the raw HTML string
     return pages
 
 
 def extract_facility_detail_html(detail_url: str) -> str:
     """Fetch the raw HTML of a single facility's detail page. Returns raw text only."""
+    # pull individual page of a specific marina for deeper stats
     resp = requests.get(detail_url, headers=HEADERS, timeout=15)
     resp.raise_for_status()
     return resp.text
@@ -66,6 +74,8 @@ def extract_all_detail_pages(detail_urls: list[str], delay_seconds: float = 1.5)
     Fetch raw HTML for a list of detail page URLs, being polite to the server
     with a short delay between requests. Returns {url: raw_html}.
     """
+    # iterating through list of individual marina links, add a longer delay
+    # then build a dictionary mapping each URL to its raw HTML content
     pages = {}
     for url in detail_urls:
         print(f"[extract] Fetching {url}")
