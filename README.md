@@ -53,7 +53,7 @@ versions of this project.
 ## Live links
 
 - Tableau Dashboard: *https://public.tableau.com/app/profile/patrick.ngo4046/vizzes*
-- Figma Positioning Summary: *(add after publishing)*
+- Figma Positioning Summary: *https://www.figma.com/community/file/1689553724007096340/blue-sky-marina-figma?fuid=1628466614820914576*
 
 ## Tech stack
 * Language: Python 3.9
